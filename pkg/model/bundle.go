@@ -5,11 +5,11 @@ type ConnectionConfig struct {
 	// Servers may infer this from the endpoint the client submits requests to.
 	// In CamelCase.
 	// +optional
-	Kind string `yaml:"kind,omitempty"`
+	Kind string `json:"kind,omitempty"`
 	// APIVersion defines the versioned schema of this representation of an   object.
 	// Servers should convert recognized schemas to the latest internal value,   and may reject unrecognized values.
 	// +optional
-	APIVersion string `yaml:"apiVersion,omitempty"`
+	APIVersion string `json:"apiVersion,omitempty"`
 	// Datacenters is a map of referenceable names to datacenter configs.
 	Datacenters map[string]*Datacenter `json:"datacenters"`
 	// AuthInfos is a map of referenceable names to authentication configs.

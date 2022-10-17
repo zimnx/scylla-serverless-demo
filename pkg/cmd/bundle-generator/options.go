@@ -10,6 +10,8 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/util/errors"
 	"k8s.io/client-go/kubernetes"
+	_ "k8s.io/client-go/plugin/pkg/client/auth"
+	_ "k8s.io/client-go/plugin/pkg/client/auth/gcp"
 	restclient "k8s.io/client-go/rest"
 	"k8s.io/client-go/tools/clientcmd"
 	"sigs.k8s.io/yaml"
@@ -23,6 +25,7 @@ type BundleGeneratorOptions struct {
 	KubeConfigPath string
 	Username       string
 	Password       string
+	DatacenterName string
 
 	RestConfig *restclient.Config
 }
@@ -52,6 +55,10 @@ func (o *BundleGeneratorOptions) Validate(args []string) error {
 
 	if len(o.Namespace) == 0 {
 		errs = append(errs, fmt.Errorf("namespace cannot be empty"))
+	}
+
+	if len(o.DatacenterName) == 0 {
+		errs = append(errs, fmt.Errorf("datacenter name cannot be empty"))
 	}
 
 	return errors.NewAggregate(errs)
@@ -95,9 +102,9 @@ func (o *BundleGeneratorOptions) Run(ctx context.Context) error {
 
 	bundle := model.ConnectionConfig{
 		Datacenters: map[string]*model.Datacenter{
-			"default": {
+			o.DatacenterName: {
 				CertificateAuthorityData: caCertData,
-				Server:                   fmt.Sprintf("any.%s", o.NodeDomain),
+				Server:                   fmt.Sprintf("any.%s:443", o.NodeDomain),
 				NodeDomain:               o.NodeDomain,
 			},
 		},
@@ -111,7 +118,7 @@ func (o *BundleGeneratorOptions) Run(ctx context.Context) error {
 		},
 		Contexts: map[string]*model.Context{
 			"default": {
-				DatacenterName: "default",
+				DatacenterName: o.DatacenterName,
 				AuthInfoName:   "default",
 			},
 		},

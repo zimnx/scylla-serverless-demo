@@ -42,6 +42,7 @@ func NewBundleGenerator(ctx context.Context) *cobra.Command {
 	cmd.Flags().StringVarP(&o.KubeConfigPath, "kube-config", "", o.KubeConfigPath, "path to kube config")
 	cmd.Flags().StringVarP(&o.Username, "username", "", o.Username, "username used for CQL authentication")
 	cmd.Flags().StringVarP(&o.Password, "password", "", o.Password, "password user for CQL authentication")
+	cmd.Flags().StringVarP(&o.DatacenterName, "datacenter-name", "", o.DatacenterName, "name of the scylla datacenter")
 
 	return cmd
 }
