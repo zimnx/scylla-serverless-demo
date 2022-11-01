@@ -104,7 +104,7 @@ func (o *BundleGeneratorOptions) Run(ctx context.Context) error {
 		Datacenters: map[string]*model.Datacenter{
 			o.DatacenterName: {
 				CertificateAuthorityData: caCertData,
-				Server:                   fmt.Sprintf("any.%s:443", o.NodeDomain),
+				Server:                   fmt.Sprintf("any.%s:9142", o.NodeDomain),
 				NodeDomain:               o.NodeDomain,
 			},
 		},
